@@ -30,42 +30,34 @@ The **Library API** is a library management system developed in .NET 8. The API 
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/library-api.git
-cd library-api
+git clone [https://github.com/your-username/library-api.git](https://github.com/Thyago-Oliveira-Perez/Library.git)
+cd Library
 ```
 
-### 2. Configure the Environment
-Ensure the `.env` file is correctly configured with the environment variables for the database and RabbitMQ.
-
-### 3. Start the Containers with Docker Compose
+### 2. Start the Containers with Docker Compose
 ```bash
 docker-compose up -d
 ```
 This will start:
 - The API in .NET 8;
 - The MySQL database;
-- RabbitMQ with the management dashboard.
+- RabbitMQ;
+- 
 
-### 4. Access the API
+### 3. Access the API
 The interactive API documentation will be available at:
 ```
 http://localhost:5000/swagger
 ```
 
-### 5. Run the Tests
+### 4. Run the Tests
 ```bash
 dotnet test
 ```
 
 ## 📆 Project Structure
 ```
-├── src/
-│   ├── Library.API/               # Main API project
-│   ├── Library.Domain/            # Domain layer
-│   ├── Library.Infrastructure/    # Infrastructure (DB, RabbitMQ, Logs)
-│   └── Library.Tests/             # Unit and integration tests
-├── docker-compose.yml             # Docker Compose configuration
-└── README.md                      # Project documentation
+
 ```
 
 ## 📊 Contributions
