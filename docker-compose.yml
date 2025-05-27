@@ -1,0 +1,26 @@
+﻿version: '3.8'
+
+services:
+  webapp:
+    container_name: webapp
+    build:
+      context: .
+      dockerfile: webapp/Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - library-network
+
+  webservice:
+    container_name: webservice
+    build:
+      context: .
+      dockerfile: webservice/Library/Dockerfile
+    networks:
+      - library-network
+
+networks:
+  library-network:
+    driver: bridge
+
+volumes:

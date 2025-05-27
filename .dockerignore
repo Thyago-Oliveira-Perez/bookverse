@@ -1,0 +1,53 @@
+﻿# Version control
+**/.git
+**/.gitignore
+
+# IDE and editor files
+**/.vs
+**/.vscode
+**/.idea
+**/*.swp
+**/*.swo
+**/.project
+**/.settings
+
+# Dependencies and build artifacts
+**/node_modules
+**/.pnpm-store
+**/dist
+**/build
+**/bin
+**/obj
+
+# Environment and secrets
+**/.env
+**/.env.*
+!**/.env.example
+**/secrets.dev.yaml
+
+# Debug logs
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+
+# Docker files
+**/.dockerignore
+**/docker-compose*
+**/Dockerfile*
+
+# Azure and deployment
+**/azds.yaml
+**/charts
+**/values.dev.yaml
+**/*.dbmdl
+**/*.jfm
+**/*.*proj.user
+
+# OS files
+**/.DS_Store
+**/Thumbs.db
+
+# Documentation
+LICENSE
+README.md 

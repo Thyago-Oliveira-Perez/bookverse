@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  webapp:
+    environment:
+      - VITE_API_URL=http://webservice:8080/api
+    volumes:
+      - ./.env:/usr/share/nginx/html/.env
