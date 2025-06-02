@@ -30,7 +30,7 @@ The **Library API** is a library management system developed in .NET 8. The API 
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/your-username/library-api.git](https://github.com/Thyago-Oliveira-Perez/Library.git)
+git clone https://github.com/Thyago-Oliveira-Perez/Library.git
 cd Library
 ```
 
