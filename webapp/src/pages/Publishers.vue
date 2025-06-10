@@ -1,0 +1,1 @@
+<template><h1>Publishers Page</h1></template>
