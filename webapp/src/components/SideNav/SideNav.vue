@@ -26,7 +26,6 @@ const activeUser = ref({
 </script>
 
 <template>
-
   <aside class="sidebar" :class="{ 'collapsed': isCollapsed }">
     <div class="admin-header">
       <div class="admin-header-user">
@@ -52,7 +51,6 @@ const activeUser = ref({
 
 <style scoped>
 .sidebar {
-  position: fixed;
   top: 0;
   left: 0;
   height: 100vh;

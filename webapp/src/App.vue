@@ -18,8 +18,8 @@ import { RouterView } from "vue-router";
   height: 100vh;
 }
 .content {
-  flex: 1;
-  padding: 2rem;
-  overflow-y: auto;
+  flex-grow: 1;
+  overflow: auto;
+  padding: 1rem;
 }
 </style>
