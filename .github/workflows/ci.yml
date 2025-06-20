@@ -13,5 +13,5 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - run: dotnet restore webservice/src/Library.WebAPI/Library.WebAPI.csproj
-      - run: dotnet build --no-restore
-      - run: dotnet test
+      - run: dotnet build --no-restore webservice/src/Library.WebAPI/Library.WebAPI.csproj
+      - run: dotnet test webservice/tests/Library.UnitTests/Library.UnitTests.csproj
