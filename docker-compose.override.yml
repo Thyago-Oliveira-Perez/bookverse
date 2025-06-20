@@ -1,8 +1,7 @@
 version: '3.8'
 
 services:
-  webapp:
+  webservice:
     environment:
-      - VITE_API_URL=http://webservice:8080/api
-    volumes:
-      - ./.env:/usr/share/nginx/html/.env
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=localhost;Port=5432;Database=library_db;Username=root;Password=rootpassword
