@@ -13,9 +13,10 @@ public class CreateManagerHandler(IManagerRepository repository, ILogger<CreateM
         try
         {
             logger.LogInformation("Creating manager");
-            var manager = new Manager(request.Name, request.Email);
+            var manager = new Manager();
+            manager.Create(request.Name, request.Email);
             logger.LogInformation("Manager created");
-            return await repository.AddManager(manager);
+            return await repository.AddManagerAsync(manager);
         }
         catch (Exception ex)
         {

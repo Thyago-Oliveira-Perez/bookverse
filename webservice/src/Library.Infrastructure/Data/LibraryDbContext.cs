@@ -13,10 +13,21 @@ public class LibraryDbContext(DbContextOptions<LibraryDbContext> options) : DbCo
         modelBuilder.Entity<Manager>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Name).IsRequired();
-            entity.Property(e => e.Email).IsRequired();
-            
-            entity.HasIndex(e => e.Email).IsUnique();
+            entity.OwnsOne(e => e.Name, name =>
+            {
+                name.Property(e => e.Value).HasColumnName("Name").IsRequired();
+            });
+            entity.OwnsOne(e => e.Email, owned =>
+            {
+                owned.Property(e => e.Value)
+                    .HasColumnName("Email")
+                    .IsRequired();
+                owned.WithOwner();
+                owned.HasIndex(e => e.Value).IsUnique();
+            });
+            entity.Property(e => e.CreatedAt).IsRequired();
+            entity.Property(e => e.UpdatedAt);
+            entity.Property(e => e.DeletedAt);
         });
     }
 }

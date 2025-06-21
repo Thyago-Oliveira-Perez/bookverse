@@ -18,6 +18,16 @@ builder.Services.AddDbContext<LibraryDbContext>(options =>
 builder.Services.AddMediatR(typeof(CreateManagerHandler).Assembly);
 builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowedOrigins", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddOpenTelemetry().WithTracing(tracing =>
 {
     tracing.AddAspNetCoreInstrumentation();
@@ -33,6 +43,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowedOrigins");
 app.UseAuthorization();
 app.MapControllers();
 

@@ -19,6 +19,16 @@ public class ManagerController(IMediator mediator) : ControllerBase
         return Ok();
     }
     
+    [HttpPost("update")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Create([FromBody] UpdateManagerRequest updateManagerRequest)
+    {
+        await mediator.Send(updateManagerRequest);
+        return Ok();
+    }
+    
     [HttpGet("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -26,6 +36,16 @@ public class ManagerController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> List()
     {
         var manager = await mediator.Send(new ListManagersRequest());
+        return Ok(manager);
+    }
+    
+    [HttpDelete("list")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Delete([FromQuery] int id)
+    {
+        var manager = await mediator.Send(new DeleteManagerRequest(id));
         return Ok(manager);
     }
 }

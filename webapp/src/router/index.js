@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Dashboard from "../pages/Dashboard.vue";
-import Managers from "../pages/Managers.vue";
+import Managers from "../pages/Manager/Managers.vue";
 import Users from "../pages/Users.vue";
 import Books from "../pages/Books.vue";
 import Authors from "../pages/Authors.vue";

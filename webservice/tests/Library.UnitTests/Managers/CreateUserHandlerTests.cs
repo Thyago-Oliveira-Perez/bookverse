@@ -26,7 +26,7 @@ public class CreateManagerHandlerTests
         const int expectedManagerId = 1;
         
         _repositoryMock
-            .Setup(x => x.AddManager(It.IsAny<Manager>()))
+            .Setup(x => x.AddManagerAsync(It.IsAny<Manager>()))
             .ReturnsAsync(expectedManagerId);
 
         // Act
@@ -34,7 +34,7 @@ public class CreateManagerHandlerTests
 
         // Assert
         _repositoryMock.Verify(
-            x => x.AddManager(It.Is<Manager>(m => 
+            x => x.AddManagerAsync(It.Is<Manager>(m => 
                 m.Name == request.Name && 
                 m.Email == request.Email)),
             Times.Once);
@@ -69,7 +69,7 @@ public class CreateManagerHandlerTests
         var exception = new Exception("Database error");
         
         _repositoryMock
-            .Setup(x => x.AddManager(It.IsAny<Manager>()))
+            .Setup(x => x.AddManagerAsync(It.IsAny<Manager>()))
             .ThrowsAsync(exception);
 
         // Act

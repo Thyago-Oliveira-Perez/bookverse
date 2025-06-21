@@ -1,8 +1,8 @@
-﻿using Library.Domain.Entities;
+﻿using Library.Application.DTOs;
 
 namespace Library.Application.Responses;
 
 public class ListManagersResponse
 {
-    public IEnumerable<Manager> Data { get; set; }
+    public IEnumerable<ManagerDto> Data { get; set; }
 }

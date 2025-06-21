@@ -1,14 +1,28 @@
-﻿namespace Library.Domain.Entities;
+﻿using Library.Domain.ValueObjects;
 
-public class Manager
+namespace Library.Domain.Entities;
+
+public class Manager : BaseEntity
 {
-    public Manager(string name, string email)
+    public Name Name { get; private set; } = null!;
+    public Email Email { get; private set; } = null!;
+
+    public void Create(string name, string email)
     {
-        Name = name;
-        Email = email;
+        Name = new Name(name);
+        Email = new Email(email);
+        CreatedAt = DateTime.UtcNow;
     }
 
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
+    public void Update(string newName, string newEmail)
+    {
+        Name = new Name(newName);
+        Email = new Email(newEmail);
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Delete()
+    {
+        DeletedAt = DateTime.UtcNow;
+    }
 }

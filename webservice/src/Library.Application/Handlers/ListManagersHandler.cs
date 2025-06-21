@@ -1,4 +1,4 @@
-﻿using Library.Application.Commands;
+﻿using Library.Application.DTOs;
 using Library.Application.Requests;
 using Library.Application.Responses;
 using Library.Domain.Interfaces;
@@ -14,11 +14,20 @@ public class ListManagersHandler(IManagerRepository repository, ILogger<CreateMa
         try
         {
             logger.LogInformation("Listing managers");
-            var managers = await repository.GetManagers();
+            var managers = await repository.GetManagersAsync();
+            
+            var result = managers.Select(e => new ManagerDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Email = e.Email,
+                CreatedAt = e.CreatedAt,
+            });
+            
             logger.LogInformation("Manager retrieved");
             return new ListManagersResponse
             {
-                Data = managers
+                Data = result
             };
         }
         catch (Exception ex)
