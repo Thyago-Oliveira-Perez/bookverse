@@ -1,71 +1,181 @@
-# 📖 Library API
+# 📚 Library App
 
-## 🔎 About the Project
-The **Library API** is a library management system developed in .NET 8. The API aims to enable the registration, management, and control of books, authors, categories, and loans in a simple and efficient way. The system is designed to facilitate both internal library management and public catalog access.
-
-## 🚀 Features
-- Registration and management of **books**, **authors**, and **categories**;
-- Recording and control of **loans** and **returns**;
-- Book availability inquiries;
-- **RabbitMQ** notification system for important events, such as pending returns;
-- **Structured logs** with Serilog to facilitate monitoring and diagnostics;
-- Automated tests with **NUnit** to ensure code quality.
+Modern web application built with Hexagonal Architecture in .NET 8, Vue.js frontend, PostgreSQL as the database, and RabbitMQ for messaging. Includes full local infrastructure using Docker and CI with GitHub Actions.
 
 ## 🚀 Technologies Used
-- **.NET 8** - Main framework for API development;
-- **Entity Framework Core** - ORM for object mapping and database access;
-- **MySQL** - Relational database for information storage;
-- **RabbitMQ** - Message broker for asynchronous communication between services;
-- **Serilog** - Logging library for monitoring and debugging;
-- **OpenAPI (Swagger)** - Interactive API documentation;
-- **Docker** - For containerizing the application and supporting services;
-- **NUnit** - Framework for creating unit and integration tests.
 
-## 🚫 Requirements
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [Docker](https://www.docker.com/get-started)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+### 🔧 Backend (.NET 8)
+- **ASP.NET Core 8 (WebAPI)**
+- **Entity Framework Core (PostgreSQL)**
+- **MediatR** – CQRS and handlers
+- **OpenTelemetry** – observability
+- **RabbitMQ.Client** – messaging
 
-## 🚧 How to Download and Run the Project
+### 💻 Frontend
+- **Vue.js** – Single Page Application
+- **pnpm** – fast package manager for Node.js
+- **Axios** – HTTP client
 
-### 1. Clone the Repository
+### 🧪 Testing
+- **xUnit**
+- **FluentAssertions**
+- **Moq**
+
+### 🐘 Database
+- **PostgreSQL**
+
+### 📦 Infrastructure
+- **Docker Compose** – consistent local development
+- **RabbitMQ** – message queue
+- **GitHub Actions** – CI pipeline for build and tests
+
+---
+
+## 🗂️ Project Structure
+
+```
+
+Library/
+├── webservice/
+├─── src/
+│     ├── Library.Application/       # Use cases, commands, handlers (MediatR)
+│     ├── Library.Domain/            # Entities, interfaces, domain logic
+│     ├── Library.Infrastructure/    # Repositories, DbContext, external services
+│     ├── Library.Messages/          # Messaging contracts
+│     └── Library.WebAPI/            # Controllers, Program.cs, middlewares
+│
+├── webapp/                          # Vue.js project
+│
+├── tests/
+│   └── Library.UnitTests/           # Unit tests
+│
+├── docker/
+│   ├── .dockerignore
+│   ├── docker-compose.override.yml
+│   └── docker-compose.yml
+│
+├── .github/
+│   └── workflows/ci.yml           # CI pipeline
+└── README.md
+
+````
+
+---
+
+## ▶️ Running Locally
+
+### Prerequisites
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- [Node.js LTS](https://nodejs.org/)
+- [pnpm](https://pnpm.io/installation) – install globally:
+  ```bash
+  npm install -g pnpm
+  ````
+
+* [Docker](https://www.docker.com/)
+* EF Core CLI:
+
+  ```bash
+  dotnet tool install --global dotnet-ef
+  ```
+
+---
+
+### 🔧 1. Clone the repository
+
 ```bash
 git clone https://github.com/Thyago-Oliveira-Perez/Library.git
 cd Library
 ```
 
-### 2. Start the Containers with Docker Compose
+---
+
+### 🐳 2. Start local infrastructure
+
 ```bash
-docker-compose up -d
+docker compose -f docker/docker-compose.yml -f docker/docker-compose.override.yml up -d
 ```
+
 This will start:
-- The API in .NET 8;
-- The MySQL database;
-- RabbitMQ;
-- 
 
-### 3. Access the API
-The interactive API documentation will be available at:
-```
-http://localhost:5000/swagger
-```
-
-### 4. Run the Tests
-```bash
-dotnet test
-```
-
-## 📆 Project Structure
-```
-
-```
-
-## 📊 Contributions
-Contributions are welcome! Feel free to open issues and pull requests.
-
-## ✨ License
-This project is licensed under the [MIT License](LICENSE).
+* PostgreSQL on port `5432`
+* RabbitMQ UI: [http://localhost:15672](http://localhost:15672) (user: `guest`, password: `guest`)
 
 ---
-Made with 🚀 by Thyago de Oliveira Perez.
 
+### 🛠️ 3. Run the backend (.NET)
+
+```bash
+cd webservice/src
+dotnet ef database update --project src/Library.Infrastructure --startup-project src/Library.WebAPI
+dotnet run --project Library.WebAPI
+```
+
+---
+
+### 🌐 4. Run the frontend (Vue.js with pnpm)
+
+```bash
+cd webapp
+pnpm install
+pnpm run dev
+```
+
+Access the app at [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 📄 Generating migrations
+
+```bash
+dotnet ef migrations add [NAME] --project Library.Infrastructure --startup-project Library.WebAPI
+dotnet ef database update --project src/Library.Infrastructure --startup-project src/Library.WebAPI
+```
+
+## ✅ Running Tests
+
+```bash
+dotnet test webservice/tests/Library.UnitTests
+```
+
+---
+
+## 📦 CI/CD with GitHub Actions
+
+The project includes a basic workflow at `.github/workflows/ci.yml` with the following steps:
+
+* Restore dependencies
+* Build
+* Run unit tests
+
+---
+
+## 📚 Useful Commands
+
+| Command                         | Description                      |
+| ------------------------------- | -------------------------------- |
+| `dotnet ef migrations add [NAME]` | Create a new EF Core migration   |
+| `dotnet ef database update`     | Apply migrations to the database |
+| `docker compose down`           | Stop all containers              |
+| `docker compose logs -f`        | View logs in real time           |
+| `dotnet run --project ...`      | Run a specific .NET project      |
+| `pnpm install`                  | Install frontend dependencies    |
+| `pnpm run dev`                  | Run Vue.js development server    |
+
+---
+
+## 🧱 Future Improvements
+
+* JWT authentication
+* Production-grade deployment (Azure, AWS, etc.)
+* Caching with Redis
+* Integration and load testing
+
+---
+
+## 📄 License
+
+Distributed under the MIT license. See `LICENSE` for details.
+
+---
