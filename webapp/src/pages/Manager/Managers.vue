@@ -1,9 +1,24 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useManagerService } from '../../services/managerService'
-import DynamicTable from '../../components/DynamicTable/DynamicTable.vue'
+import DynamicTable from '../../components/DynamicTable.vue'
+import DeleteModal from '../../components/DeleteModal.vue'
 
+const { fetchManagers } = useManagerService()
 const managers = ref([])
+const isModalOpen = ref(false)
+const selectedManager = ref(null)
+
+const openEditModal = (manager) => {
+  selectedManager.value = manager
+  isModalOpen.value = true
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+  selectedManager.value = null
+}
+
 const columns = [
   { key: 'name', label: 'Name' },
   { key: 'email', label: 'Email' }
@@ -13,9 +28,7 @@ const actions = [
   {
     label: 'Edit',
     color: 'blue',
-    onClick: (user) => {
-      console.log('Edit:', user)
-    }
+    onClick: openEditModal
   },
   {
     label: 'Delete',
@@ -25,8 +38,6 @@ const actions = [
     }
   }
 ]
-
-const { fetchManagers } = useManagerService()
 
 onMounted(async () => {
   const response = await fetchManagers()
@@ -39,10 +50,23 @@ onMounted(async () => {
   <div class="p-6">
     <h1 class="text-2xl mb-4">Managers Page</h1>
 
+    <div v-if="managers.length > 0" class="mt-4">
+      <p class="text-gray-600">Total Managers: {{ managers.length }}</p>
+    </div>
+
     <DynamicTable
       :items="managers"
       :columns="columns"
       :actions="actions"
+    />
+    <div v-if="managers.length === 0" class="text-center text-gray-500 mt-4">
+      No managers found.
+    </div>
+
+    <DeleteModal
+      :isModalOpen="isModalOpen"
+      :selectedManager="selectedManager"
+      :closeModal="closeModal"
     />
   </div>
 </template>

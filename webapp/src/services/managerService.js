@@ -1,15 +1,23 @@
 import { useApi } from '../composables/useApi'
 
 export function useManagerService() {
-  const { get, loading, error } = useApi()
+  const { getAsync, loading, error } = useApi()
   const baseUrl = '/api/manager'
 
   const createManager = async () => {
-    return await get(`${baseUrl}/create`)
+    return await getAsync(`${baseUrl}/create`)
+  }
+
+  const updateManager = async () => {
+    return await getAsync(`${baseUrl}/list`)
   }
 
   const fetchManagers = async () => {
-    return await get(`${baseUrl}/list`)
+    return await getAsync(`${baseUrl}/list`)
+  }
+
+  const deleteManager = async (id) => {
+    return await getAsync(`${baseUrl}/delete/${id}`)
   }
 
   return { createManager, fetchManagers, loading, error }
