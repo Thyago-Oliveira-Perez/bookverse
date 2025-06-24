@@ -55,8 +55,8 @@ const activeUser = ref({
   left: 0;
   height: 100vh;
   width: 240px;
-  background-color: #1e293b;
-  color: #fff;
+  background-color: #52438f;
+  color: #f7f7f7;
   display: flex;
   flex-direction: column;
   padding: 1rem;
@@ -167,7 +167,7 @@ const activeUser = ref({
 
 .nav-link:hover,
 .active {
-  background-color: #334155;
+  background-color: #7d6cc8;
 }
 
 .icon {

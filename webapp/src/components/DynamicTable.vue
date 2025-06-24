@@ -21,11 +21,12 @@ defineProps({
           <button
             v-for="action in actions"
             :key="action.label"
-            class="action-button"
+            class="action-icon"
             :style="{ backgroundColor: action.color }"
             @click="() => action.onClick(item)"
+            :title="action.label"
           >
-            {{ action.label }}
+            <component :is="action.icon" class="icon" />
           </button>
         </td>
       </tr>
@@ -39,45 +40,51 @@ defineProps({
   border-collapse: collapse;
   margin-top: 1rem;
   font-family: Arial, sans-serif;
-  background-color: #333;
-  color: #fff;
-  border-radius: 6px;
+  color: #ffffff;
   overflow: hidden;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .custom-table thead {
-  background-color: #f5f5f5;
+  background-color: #ffffff;
 }
 
 .custom-table th,
 .custom-table td {
   padding: 12px 16px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #dddd;
 }
 
 .custom-table th {
   font-weight: 600;
-  color: #222;
+  color: #a3a6ab;
 }
 
-.table-row:hover {
-  background-color: #4c4c4c;
+.table-row {
+  color: #666974;
+  background-color: #ffffff;
 }
 
-.action-button {
+.action-icon {
   border: none;
   border-radius: 6px;
-  padding: 6px 12px;
-  margin-right: 8px;
-  color: #fff;
-  font-size: 0.9rem;
+  padding: 6px;
+  margin-right: 6px;
+  color: #ffffff;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.action-button:hover {
+.icon {
+  width: 18px;
+  height: 18px;
+}
+
+.action-icon:hover {
   filter: brightness(90%);
 }
 </style>

@@ -3,13 +3,15 @@ import { ref, onMounted } from 'vue'
 import { useManagerService } from '../../services/managerService'
 import DynamicTable from '../../components/DynamicTable.vue'
 import DeleteModal from '../../components/DeleteModal.vue'
+import { SlPencil } from 'vue-icons-plus/sl'
+import { SlTrash } from 'vue-icons-plus/sl'
 
 const { fetchManagers } = useManagerService()
 const managers = ref([])
 const isModalOpen = ref(false)
 const selectedManager = ref(null)
 
-const openEditModal = (manager) => {
+const openDeleteModal = (manager) => {
   selectedManager.value = manager
   isModalOpen.value = true
 }
@@ -27,15 +29,15 @@ const columns = [
 const actions = [
   {
     label: 'Edit',
-    color: 'blue',
-    onClick: openEditModal
+    icon: SlPencil,
+    color: '#1976d2',
+    onClick: (item) => console.log('Edit', item)
   },
   {
     label: 'Delete',
-    color: 'red',
-    onClick: (user) => {
-      console.log('Delete:', user)
-    }
+    icon: SlTrash,
+    color: '#d32f2f',
+    onClick: (item) => openDeleteModal(item)
   }
 ]
 
@@ -47,11 +49,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl mb-4">Managers Page</h1>
+  <div>
+    <h1>Managers Page</h1>
 
-    <div v-if="managers.length > 0" class="mt-4">
-      <p class="text-gray-600">Total Managers: {{ managers.length }}</p>
+    <div v-if="managers.length > 0">
+      <p>Total Managers: {{ managers.length }}</p>
     </div>
 
     <DynamicTable
@@ -59,7 +61,7 @@ onMounted(async () => {
       :columns="columns"
       :actions="actions"
     />
-    <div v-if="managers.length === 0" class="text-center text-gray-500 mt-4">
+    <div v-if="managers.length === 0">
       No managers found.
     </div>
 
@@ -70,3 +72,15 @@ onMounted(async () => {
     />
   </div>
 </template>
+
+<style scoped>
+h1 {
+  color: #0f163b;
+  font-size: 2rem
+}
+
+p {
+  color: #666974;
+  font-size: 1rem;
+}
+</style>

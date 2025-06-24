@@ -14,10 +14,10 @@ defineProps({
         </h2>
         <div class="buttons">
           <button @click="closeModal" class="cancel">
-            Cancel
+            No
           </button>
           <button class="save">
-            Save
+            Yes
           </button>
         </div>
       </div>
@@ -39,7 +39,7 @@ defineProps({
 
 .modal {
   text-align: center;
-  background-color: #333;
+  background-color: #f7f7f7;
   height: 250px;
   width: 400px;
   margin-top: 10%;
@@ -47,7 +47,7 @@ defineProps({
 }
 
 .tittle {
-  color: white;
+  color: #666974;
   margin-top: 50px;
   font-weight: 500;
 }
@@ -59,11 +59,11 @@ defineProps({
 }
 
 .cancel {
-  background-color: #f44336;
+  background-color: #d32f2f;
 }
 
 .save {
-  background-color: #4CAF50;
+  background-color: #67918a;
 }
 
 h2 {
@@ -74,8 +74,9 @@ h2 {
 button {
   width: 150px;
   height: 40px;
-  color: white;
+  color: #f7f7f7;
   font-size: 14px;
+  border: none;
   border-radius: 16px;
   margin-top: 50px;
   cursor: pointer;

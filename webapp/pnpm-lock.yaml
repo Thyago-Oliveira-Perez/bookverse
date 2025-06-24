@@ -8,15 +8,15 @@ importers:
 
   .:
     dependencies:
-      '@iconify/vue':
-        specifier: ^5.0.0
-        version: 5.0.0(vue@3.5.17)
       axios:
         specifier: ^1.10.0
         version: 1.10.0
       vue:
         specifier: ^3.5.13
         version: 3.5.17
+      vue-icons-plus:
+        specifier: ^0.1.8
+        version: 0.1.8(vue@3.5.17)
       vue-router:
         specifier: ^4.5.1
         version: 4.5.1(vue@3.5.17)
@@ -325,14 +325,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-
-  '@iconify/types@2.0.0':
-    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
-
-  '@iconify/vue@5.0.0':
-    resolution: {integrity: sha512-C+KuEWIF5nSBrobFJhT//JS87OZ++QDORB6f2q2Wm6fl2mueSTpFBeBsveK0KW9hWiZ4mNiPjsh6Zs4jjdROSg==}
-    peerDependencies:
-      vue: '>=3'
 
   '@jridgewell/gen-mapping@0.3.8':
     resolution: {integrity: sha512-imAbBGkb+ebQyxKgzv5Hu2nmROxoDOXHh80evxdoXNOrvAnVx7zimzc1Oo5h9RlfV4vPXaE2iM5pOFbvOCClWA==}
@@ -1010,6 +1002,11 @@ packages:
       yaml:
         optional: true
 
+  vue-icons-plus@0.1.8:
+    resolution: {integrity: sha512-Xc4hDsD/oP9waSUf44nSaFBhUPo+QkpKclx0S7//5BRACpXymctbit02epek0VRW6nb81pR486XmxPP/ofm2yQ==}
+    peerDependencies:
+      vue: '>=2.7.0'
+
   vue-router@4.5.1:
     resolution: {integrity: sha512-ogAF3P97NPm8fJsE4by9dwSYtDwXIY1nFY9T6DyQnGHd1E2Da94w9JIolpe42LJGIl0DwOHBi8TcRPlPGwbTtw==}
     peerDependencies:
@@ -1307,13 +1304,6 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.5':
     optional: true
-
-  '@iconify/types@2.0.0': {}
-
-  '@iconify/vue@5.0.0(vue@3.5.17)':
-    dependencies:
-      '@iconify/types': 2.0.0
-      vue: 3.5.17
 
   '@jridgewell/gen-mapping@0.3.8':
     dependencies:
@@ -1969,6 +1959,10 @@ snapshots:
       tinyglobby: 0.2.14
     optionalDependencies:
       fsevents: 2.3.3
+
+  vue-icons-plus@0.1.8(vue@3.5.17):
+    dependencies:
+      vue: 3.5.17
 
   vue-router@4.5.1(vue@3.5.17):
     dependencies:
