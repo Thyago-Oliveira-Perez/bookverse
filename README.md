@@ -38,7 +38,7 @@ Modern web application built with Hexagonal Architecture in .NET 8, Vue.js front
 Library/
 ├── webservice/
 ├─── src/
-│     ├── Library.Application/       # Use cases, commands, handlers (MediatR)
+│     ├── Library.Application/       # Use cases, commands, handlers (MediatR), internal services
 │     ├── Library.Domain/            # Entities, interfaces, domain logic
 │     ├── Library.Infrastructure/    # Repositories, DbContext, external services
 │     ├── Library.Messages/          # Messaging contracts

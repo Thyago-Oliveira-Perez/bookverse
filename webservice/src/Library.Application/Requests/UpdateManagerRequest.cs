@@ -1,6 +1,7 @@
 ﻿using Library.Application.Responses;
+using Library.Domain.Entities;
 using MediatR;
 
 namespace Library.Application.Requests;
 
-public record UpdateManagerRequest(int Id, string Name, string Email) : IRequest<UpdateManagerResponse>;
+public record UpdateManagerRequest(Manager manager) : IRequest<UpdateManagerResponse>;

@@ -1,5 +1,3 @@
-﻿using MediatR;
+﻿namespace Library.Application.Responses;
 
-namespace Library.Application.Responses;
-
-public record UpdateManagerResponse : BaseResponse;
+public record UpdateManagerResponse(string Name, string Email);

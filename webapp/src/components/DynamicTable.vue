@@ -1,12 +1,37 @@
 <script setup>
-defineProps({
+import { EpDArrowLeft, EpArrowLeft, EpArrowRight, EpDArrowRight } from 'vue-icons-plus/ep'
+import { computed, defineProps } from 'vue'
+
+const props = defineProps({
   items: Array,
   columns: Array,
-  actions: Array
+  actions: Array,
+  pagination: Object,
 })
 </script>
 
 <template>
+  <div class="pagination-container">
+    <div>
+      <p>Total: {{ items.length }}</p>
+    </div>
+    <div class="pagination-controls">
+      <button @click="pagination.goToFirstPage" :disabled="pagination.currentPage === 1">
+        <component :is="EpDArrowLeft" class="icon" />
+      </button>
+      <button @click="pagination.goToPreviousPage" :disabled="pagination.currentPage === 1">
+        <component :is="EpArrowLeft" class="icon" />
+      </button>
+      <p>Page {{ pagination.currentPage }} of {{ pagination.totalPages }}</p>
+      <button @click="pagination.goToNextPage" :disabled="pagination.currentPage === pagination.totalPages">
+        <component :is="EpArrowRight" class="icon" />
+      </button>
+      <button @click="pagination.goToLastPage" :disabled="pagination.currentPage === pagination.totalPages">
+        <component :is="EpDArrowRight" class="icon" />
+      </button>
+    </div>
+  </div>
+
   <table class="custom-table">
     <thead>
       <tr class="table-header">
@@ -35,6 +60,42 @@ defineProps({
 </template>
 
 <style scoped>
+.pagination-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.pagination-container p {
+  color: #666974;
+  font-size: 1rem;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pagination-controls button {
+  padding: 0.4rem;
+  border: none;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .custom-table {
   width: 100%;
   border-collapse: collapse;

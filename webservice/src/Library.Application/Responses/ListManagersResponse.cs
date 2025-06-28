@@ -1,4 +1,4 @@
-﻿using Library.Application.DTOs;
+﻿using Library.Application.DTOs.Manager;
 
 namespace Library.Application.Responses;
 

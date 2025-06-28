@@ -1,8 +1,13 @@
-using Library.Application.Handlers;
+using Library.Application;
+using Library.Application.PreProcessors;
+using Library.Application.Requests;
+using Library.Application.Services;
 using Library.Domain.Interfaces;
 using Library.Infrastructure.Data;
 using Library.Infrastructure.Repositories;
+using Library.WebAPI.Middlewares;
 using MediatR;
+using MediatR.Pipeline;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Trace;
 
@@ -12,10 +17,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IManagerService, ManagerService>();
+
 builder.Services.AddDbContext<LibraryDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddMediatR(typeof(CreateManagerHandler).Assembly);
+// Register 
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(typeof(MediatorAssembly).Assembly);
+});
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPostProcessorBehavior<,>));
+
+builder.Services.AddTransient<IRequestPreProcessor<CreateManagerRequest>, CreateManagerPreProcessor>();
+
+
 builder.Services.AddScoped<IManagerRepository, ManagerRepository>();
 
 builder.Services.AddCors(options =>
@@ -35,6 +51,8 @@ builder.Services.AddOpenTelemetry().WithTracing(tracing =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

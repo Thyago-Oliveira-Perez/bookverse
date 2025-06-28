@@ -1,5 +1,8 @@
-﻿using Library.Application.Commands;
+﻿using Library.Application.Common;
+using Library.Application.DTOs.Manager;
 using Library.Application.Requests;
+using Library.Application.Responses;
+using Library.Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,32 +10,26 @@ namespace Library.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ManagerController(IMediator mediator) : ControllerBase
+[ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+public class ManagerController(IMediator mediator, IManagerService service) : ControllerBase
 {
     [HttpPost("create")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create([FromBody] CreateManagerCommand createManagerCommand)
+    [ProducesResponseType(typeof(ApplicationResult<CreateManagerResponseDTO>), StatusCodes.Status201Created)]
+    public async Task<ActionResult<ApplicationResult<CreateManagerResponseDTO>>> Create([FromBody] CreateManagerDTO request)
     {
-        await mediator.Send(createManagerCommand);
-        return Ok();
+        return await service.Create(request);
     }
     
-    [HttpPost("update")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Create([FromBody] UpdateManagerRequest updateManagerRequest)
+    [HttpPatch("update")]
+    [ProducesResponseType(typeof(ApplicationResult<UpdateManagerResponse>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApplicationResult<UpdateManagerResponse>>> Update([FromBody] UpdateManagerDTO request)
     {
-        await mediator.Send(updateManagerRequest);
-        return Ok();
+        return await service.Update(request);
     }
     
     [HttpGet("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> List()
     {
         var manager = await mediator.Send(new ListManagersRequest());
@@ -40,12 +37,9 @@ public class ManagerController(IMediator mediator) : ControllerBase
     }
     
     [HttpDelete("delete")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete([FromQuery] int id)
+    [ProducesResponseType(typeof(ApplicationResult<DeleteManagerResponseDTO>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApplicationResult<DeleteManagerResponseDTO>>> Delete([FromQuery] int id)
     {
-        var manager = await mediator.Send(new DeleteManagerRequest(id));
-        return Ok(manager);
+        return await service.Delete(id);
     }
 }

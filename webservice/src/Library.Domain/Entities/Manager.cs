@@ -7,17 +7,20 @@ public class Manager : BaseEntity
     public Name Name { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
 
-    public void Create(string name, string email)
+    public static Manager Create(string name, string email)
     {
-        Name = new Name(name);
-        Email = new Email(email);
-        CreatedAt = DateTime.UtcNow;
+        return new Manager
+        {
+            Name = new Name(name),
+            Email = new Email(email),
+            CreatedAt = DateTime.UtcNow
+        };
     }
 
-    public void Update(string newName, string newEmail)
+    public void Update(string? newName, string? newEmail)
     {
-        Name = new Name(newName);
-        Email = new Email(newEmail);
+        Name = newName != null ? new Name(newName) : Name;
+        Email = newEmail != null ? new Email(newEmail) : Email;
         UpdatedAt = DateTime.UtcNow;
     }
 

@@ -1,20 +1,28 @@
 ﻿using Library.Domain.Entities;
 using Library.Domain.Interfaces;
 using Library.Infrastructure.Data;
+using Library.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Infrastructure.Repositories;
 
 public class ManagerRepository(LibraryDbContext context) : IManagerRepository
 {
-    public async Task<int> AddManagerAsync(Manager manager)
+    public async Task<int> AddAsync(Manager manager)
     {
-        await context.Managers.AddAsync(manager);
-        await context.SaveChangesAsync();
-        return manager.Id;
+        try
+        {
+            await context.Managers.AddAsync(manager);
+            await context.SaveChangesAsync();
+            return manager.Id;
+        }
+        catch (Exception ex)
+        {
+            throw new DatabaseException("Failed to save changes to database", ex);
+        }
     }
 
-    public async Task<IEnumerable<Manager>> GetManagersAsync(bool includeDeleted = false)
+    public async Task<IEnumerable<Manager>> ListAsync(bool includeDeleted = false)
     {
         return (await context
             .Managers
@@ -23,20 +31,19 @@ public class ManagerRepository(LibraryDbContext context) : IManagerRepository
             .Where(e => includeDeleted ? e.DeletedAt != null : e.DeletedAt == null);
     }
 
-    public async Task<Manager?> GetManagerByIdAsync(int id)
+    public async Task<Manager?> GetByIdAsync(int id)
     {
         return await context.Managers.FindAsync(id);
     }
 
-    public async Task UpdateManagerAsync(Manager manager)
+    public async Task UpdateAsync(Manager manager)
     {
         context.Managers.Update(manager);
         await context.SaveChangesAsync();
     }
 
-    public async Task DeleteManagerAsync(Manager manager)
+    public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken)
     {
-        manager.Delete();
-        await UpdateManagerAsync(manager);
+        return await context.Managers.AnyAsync(e => e.Email.Value == email, cancellationToken);
     }
 }

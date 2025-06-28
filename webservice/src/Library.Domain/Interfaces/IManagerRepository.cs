@@ -4,9 +4,9 @@ namespace Library.Domain.Interfaces;
 
 public interface IManagerRepository
 {
-    Task<int> AddManagerAsync(Manager manager);
-    Task<IEnumerable<Manager>> GetManagersAsync(bool includeDeleted = false);
-    Task<Manager?> GetManagerByIdAsync(int id);
-    Task UpdateManagerAsync(Manager manager);
-    Task DeleteManagerAsync(Manager manager);
+    Task<int> AddAsync(Manager manager);
+    Task<IEnumerable<Manager>> ListAsync(bool includeDeleted = false);
+    Task<Manager?> GetByIdAsync(int id);
+    Task UpdateAsync(Manager manager);
+    Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken);
 }

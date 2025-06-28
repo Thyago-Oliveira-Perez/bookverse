@@ -21,6 +21,22 @@ const closeModal = () => {
   selectedManager.value = null
 }
 
+const goToFirstPage = () => {
+  console.log('Going to first page')
+}
+
+const goToPreviousPage = () => {
+  console.log('Going to first page')
+}
+
+const goToNextPage = () => {
+  console.log('Going to first page')
+}
+
+const goToLastPage = () => {
+  console.log('Going to first page')
+}
+
 const columns = [
   { key: 'name', label: 'Name' },
   { key: 'email', label: 'Email' }
@@ -52,14 +68,18 @@ onMounted(async () => {
   <div>
     <h1>Managers Page</h1>
 
-    <div v-if="managers.length > 0">
-      <p>Total Managers: {{ managers.length }}</p>
-    </div>
-
     <DynamicTable
       :items="managers"
       :columns="columns"
       :actions="actions"
+      :pagination="{
+        currentPage: 1,
+        totalPages: 1,
+        goToFirstPage,
+        goToPreviousPage,
+        goToNextPage,
+        goToLastPage
+      }"
     />
     <div v-if="managers.length === 0">
       No managers found.
@@ -77,10 +97,5 @@ onMounted(async () => {
 h1 {
   color: #0f163b;
   font-size: 2rem
-}
-
-p {
-  color: #666974;
-  font-size: 1rem;
 }
 </style>

@@ -1,4 +1,4 @@
-﻿using Library.Application.DTOs;
+﻿using Library.Application.DTOs.Manager;
 using Library.Application.Requests;
 using Library.Application.Responses;
 using Library.Domain.Interfaces;
@@ -14,7 +14,7 @@ public class ListManagersHandler(IManagerRepository repository, ILogger<CreateMa
         try
         {
             logger.LogInformation("Listing managers");
-            var managers = await repository.GetManagersAsync();
+            var managers = await repository.ListAsync();
             
             var result = managers.Select(e => new ManagerDto
             {
