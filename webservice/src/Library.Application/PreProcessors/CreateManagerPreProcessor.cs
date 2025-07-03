@@ -1,5 +1,5 @@
-﻿using Library.Application.Requests;
-using Library.Domain.Interfaces;
+﻿using Library.Domain.Interfaces;
+using Library.Common.Requests;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Library.Application.Exceptions.ApplicationException;

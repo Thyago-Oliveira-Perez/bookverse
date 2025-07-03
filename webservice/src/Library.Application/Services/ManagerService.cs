@@ -1,17 +1,12 @@
-﻿using Library.Application.Requests;
-using Library.Application.Common;
-using Library.Application.DTOs.Manager;
-using Library.Application.Exceptions;
+﻿using Library.Common.Requests;
+using Library.Common.Results;
+using Library.Common.DTOs.Manager;
 using Library.Application.Mappings;
-using Library.Application.Responses;
-using Library.Domain.Entities;
-using Library.Domain.Interfaces;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Library.Application.Services;
 
-public class ManagerService(ILogger<ManagerService> log, IMediator mediator, IManagerRepository repository) : IManagerService
+public class ManagerService(IMediator mediator) : IManagerService
 {
     public async Task<ApplicationResult<CreateManagerResponseDTO>> Create(CreateManagerDTO request)
     {
@@ -19,45 +14,23 @@ public class ManagerService(ILogger<ManagerService> log, IMediator mediator, IMa
 
         return ApplicationResult<CreateManagerResponseDTO>.Ok(result.ToDto());
     }
-    
-    public async Task<ApplicationResult<UpdateManagerResponse>> Update(UpdateManagerDTO request)
-    {
-        var manager = await Exists(nameof(Update), request.Id);
-        
-        manager.Update(request.Name, request.Email);
-        
-        var result = await mediator.Send(new UpdateManagerRequest(manager));
 
-        return ApplicationResult<UpdateManagerResponse>.Ok(result);
+    public async Task<ApplicationResult<UpdateManagerResponseDTO>> Update(UpdateManagerDTO request)
+    {
+        var result = await mediator.Send(request.ToRequest());
+
+        return ApplicationResult<UpdateManagerResponseDTO>.Ok(result.ToDto());
     }
 
-    public Task<ApplicationResult<ListManagersResponse>> List()
+    public async Task<ApplicationResult<PaginatedResult<List<ManagerDTO>>>> List(int page = 1, int pageSize = 25)
     {
-        throw new NotImplementedException();
+        var response = await mediator.Send(new ListManagersRequest(page, pageSize));
+        return ApplicationResult<PaginatedResult<List<ManagerDTO>>>.Ok(response.Data);
     }
 
     public async Task<ApplicationResult<DeleteManagerResponseDTO>> Delete(int id)
     {
-        var manager = await Exists(nameof(Update), id);
-        
-        manager.Delete();
-        
-        await mediator.Send(new UpdateManagerRequest(manager));
-
+        await mediator.Send(new DeleteManagerRequest(id));
         return ApplicationResult<DeleteManagerResponseDTO>.Ok(new DeleteManagerResponseDTO("Success"));
-    }
-
-    private async Task<Manager> Exists(string className, int id)
-    {
-        var manager = await repository.GetByIdAsync(id);
-
-        if (manager == null)
-        {
-            var message = $"({className}) Manager {id} not found";
-            log.LogError(message);
-            throw new NotFoundException(message);
-        }
-        
-        return manager;
     }
 }

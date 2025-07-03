@@ -1,7 +1,5 @@
-﻿using Library.Application.Common;
-using Library.Application.DTOs.Manager;
-using Library.Application.Requests;
-using Library.Application.Responses;
+﻿using Library.Common.Results;
+using Library.Common.DTOs.Manager;
 using Library.Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,22 +18,21 @@ public class ManagerController(IMediator mediator, IManagerService service) : Co
     {
         return await service.Create(request);
     }
-    
+
     [HttpPatch("update")]
-    [ProducesResponseType(typeof(ApplicationResult<UpdateManagerResponse>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ApplicationResult<UpdateManagerResponse>>> Update([FromBody] UpdateManagerDTO request)
+    [ProducesResponseType(typeof(ApplicationResult<UpdateManagerResponseDTO>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApplicationResult<UpdateManagerResponseDTO>>> Update([FromBody] UpdateManagerDTO request)
     {
         return await service.Update(request);
     }
-    
+
     [HttpGet("list")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> List()
+    public async Task<ActionResult<ApplicationResult<PaginatedResult<List<ManagerDTO>>>>> List(int page = 1, int pageSize = 25)
     {
-        var manager = await mediator.Send(new ListManagersRequest());
-        return Ok(manager);
+        return await service.List(page, pageSize);
     }
-    
+
     [HttpDelete("delete")]
     [ProducesResponseType(typeof(ApplicationResult<DeleteManagerResponseDTO>), StatusCodes.Status200OK)]
     public async Task<ActionResult<ApplicationResult<DeleteManagerResponseDTO>>> Delete([FromQuery] int id)

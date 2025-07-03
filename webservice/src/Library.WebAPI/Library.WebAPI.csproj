@@ -24,16 +24,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Library.Application\Library.Application.csproj" />
     <ProjectReference Include="..\Library.Infrastructure\Library.Infrastructure.csproj" />
+    <ProjectReference Include="..\Library.Common\Library.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="..\..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

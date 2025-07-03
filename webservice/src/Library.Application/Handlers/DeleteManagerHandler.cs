@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Library.Application.Handlers;
 
-public class UpdateManagerHandler(ILogger<UpdateManagerHandler> log, IManagerRepository repository) : IRequestHandler<UpdateManagerRequest, UpdateManagerResponse>
+public class DeleteManagerHandler(ILogger<DeleteManagerHandler> log, IManagerRepository repository) : IRequestHandler<DeleteManagerRequest, DeleteManagerResponse>
 {
-    public async Task<UpdateManagerResponse> Handle(UpdateManagerRequest request, CancellationToken cancellationToken)
+    public async Task<DeleteManagerResponse> Handle(DeleteManagerRequest request, CancellationToken cancellationToken)
     {
         var manager = await repository.GetByIdAsync(request.Id);
 
@@ -20,10 +20,10 @@ public class UpdateManagerHandler(ILogger<UpdateManagerHandler> log, IManagerRep
             throw new NotFoundException(message);
         }
         
-        manager.Update(request.Name, request.Email);
+        manager.Delete();
         
         await repository.UpdateAsync(manager);
 
-        return new UpdateManagerResponse(manager.Name.Value, manager.Email.Value);
+        return new DeleteManagerResponse();
     }
 }

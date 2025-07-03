@@ -1,6 +1,6 @@
-﻿using Library.Application.Responses;
+﻿using Library.Common.Responses;
 using MediatR;
 
-namespace Library.Application.Requests;
+namespace Library.Common.Requests;
 
 public record DeleteManagerRequest(int Id) : IRequest<DeleteManagerResponse> { }

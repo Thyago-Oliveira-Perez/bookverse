@@ -2,6 +2,8 @@
 using Library.Domain.Interfaces;
 using Library.Infrastructure.Data;
 using Library.Infrastructure.Exceptions;
+using Library.Common.DTOs.Manager;
+using Library.Common.Results;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Infrastructure.Repositories;
@@ -22,13 +24,26 @@ public class ManagerRepository(LibraryDbContext context) : IManagerRepository
         }
     }
 
-    public async Task<IEnumerable<Manager>> ListAsync(bool includeDeleted = false)
+    public async Task<PaginatedResult<List<ManagerDTO>>> GetPaginatedAsync(int page, int pageSize, bool includeDeleted = false)
     {
-        return (await context
-            .Managers
+        var totalCount = context.Managers.Count();
+        var result = await context.Managers
             .AsNoTracking()
-            .ToListAsync())
-            .Where(e => includeDeleted ? e.DeletedAt != null : e.DeletedAt == null);
+            .Where(e => includeDeleted || e.DeletedAt == null)
+            .OrderByDescending(e => e.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(m => new ManagerDTO(m.Id, m.Name.Value, m.Email.Value, m.CreatedAt))
+            .ToListAsync();
+
+        return new PaginatedResult<List<ManagerDTO>>()
+        {
+            Page = page,
+            PageSize = pageSize,
+            Total = totalCount,
+            TotalPages = (int)Math.Ceiling((double)totalCount / pageSize),
+            Data = result
+        };
     }
 
     public async Task<Manager?> GetByIdAsync(int id)

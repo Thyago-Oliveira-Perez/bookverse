@@ -1,3 +1,3 @@
-﻿namespace Library.Application.DTOs.Manager;
+﻿namespace Library.Common.DTOs.Manager;
 
 public record CreateManagerResponseDTO(string Name, string Email);

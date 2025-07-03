@@ -1,10 +1,10 @@
 using Library.Application;
 using Library.Application.PreProcessors;
-using Library.Application.Requests;
 using Library.Application.Services;
 using Library.Domain.Interfaces;
 using Library.Infrastructure.Data;
 using Library.Infrastructure.Repositories;
+using Library.Common.Requests;
 using Library.WebAPI.Middlewares;
 using MediatR;
 using MediatR.Pipeline;
@@ -23,7 +23,8 @@ builder.Services.AddDbContext<LibraryDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register 
-builder.Services.AddMediatR(cfg => {
+builder.Services.AddMediatR(cfg =>
+{
     cfg.RegisterServicesFromAssembly(typeof(MediatorAssembly).Assembly);
 });
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));

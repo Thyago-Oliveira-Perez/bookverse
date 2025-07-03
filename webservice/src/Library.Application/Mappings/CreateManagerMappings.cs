@@ -1,6 +1,6 @@
-﻿using Library.Application.DTOs.Manager;
-using Library.Application.Requests;
-using Library.Application.Responses;
+﻿using Library.Common.DTOs.Manager;
+using Library.Common.Requests;
+using Library.Common.Responses;
 
 namespace Library.Application.Mappings;
 

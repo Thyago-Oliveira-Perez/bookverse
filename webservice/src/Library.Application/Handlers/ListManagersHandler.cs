@@ -1,6 +1,7 @@
-﻿using Library.Application.DTOs.Manager;
-using Library.Application.Requests;
-using Library.Application.Responses;
+﻿using Library.Common.DTOs.Manager;
+using Library.Common.Requests;
+using Library.Common.Responses;
+using Library.Common.Results;
 using Library.Domain.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -14,26 +15,22 @@ public class ListManagersHandler(IManagerRepository repository, ILogger<CreateMa
         try
         {
             logger.LogInformation("Listing managers");
-            var managers = await repository.ListAsync();
-            
-            var result = managers.Select(e => new ManagerDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Email = e.Email,
-                CreatedAt = e.CreatedAt,
-            });
-            
+            var data = await repository.GetPaginatedAsync(request.Page, request.PageSize);
+
             logger.LogInformation("Manager retrieved");
-            return new ListManagersResponse
-            {
-                Data = result
-            };
+            return new ListManagersResponse(data);
         }
         catch (Exception ex)
         {
             logger.LogError($"Error during manager list. Ex: {ex.Message}");
-            return new ListManagersResponse();
+            return new ListManagersResponse(new PaginatedResult<List<ManagerDTO>>()
+            {
+                Page = request.Page,
+                PageSize = request.PageSize,
+                TotalPages = 0,
+                Total = 0,
+                Data = []
+            });
         }
     }
 }

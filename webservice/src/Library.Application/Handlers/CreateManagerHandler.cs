@@ -1,9 +1,8 @@
-﻿using Library.Application.Requests;
-using Library.Application.Responses;
+﻿using Library.Common.Requests;
+using Library.Common.Responses;
 using Library.Domain.Entities;
 using Library.Domain.Interfaces;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Library.Application.Handlers;
 
@@ -13,7 +12,7 @@ public class CreateManagerHandler(IManagerRepository repository) : IRequestHandl
     {
         var manager = Manager.Create(request.Name, request.Email);
         await repository.AddAsync(manager);
-        
+
         return new CreateManagerResponse(manager.Name, manager.Email);
     }
 }

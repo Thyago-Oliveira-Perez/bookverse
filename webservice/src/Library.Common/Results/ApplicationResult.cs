@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Common;
+﻿namespace Library.Common.Results;
 
 public class ApplicationResult<T>
 {
