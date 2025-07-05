@@ -8,6 +8,14 @@ import { SlTrash } from 'vue-icons-plus/sl'
 
 const { fetchManagers } = useManagerService()
 const managers = ref([])
+const pagination = ref({
+  currentPage: 1,
+  totalPages: 1,
+  goToFirstPage: () => {},
+  goToPreviousPage: () => {},
+  goToNextPage: () => {},
+  goToLastPage: () => {}
+})
 const isModalOpen = ref(false)
 const selectedManager = ref(null)
 
@@ -59,8 +67,13 @@ const actions = [
 
 onMounted(async () => {
   const response = await fetchManagers()
-  if (response?.data) managers.value = response.data
-  else console.error('Failed to fetch managers:', response)
+  if (response?.data) {
+    managers.value = response.data.data
+    pagination.value.totalPages = response.data.totalPages
+    pagination.value.currentPage = response.data.page 
+  } else {
+    console.error('Failed to fetch managers:', response)
+  }
 })
 </script>
 
@@ -72,14 +85,7 @@ onMounted(async () => {
       :items="managers"
       :columns="columns"
       :actions="actions"
-      :pagination="{
-        currentPage: 1,
-        totalPages: 1,
-        goToFirstPage,
-        goToPreviousPage,
-        goToNextPage,
-        goToLastPage
-      }"
+      :pagination="pagination"
     />
     <div v-if="managers.length === 0">
       No managers found.
