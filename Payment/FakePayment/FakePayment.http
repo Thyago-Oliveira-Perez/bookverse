@@ -1,0 +1,28 @@
+@FakePayment_HostAddress = http://localhost:5000
+@paymentId = 2a57422b-a22d-40af-a2c1-943a211edc16
+
+### Criar pagamento
+POST {{FakePayment_HostAddress}}/api/payments/create
+Content-Type: application/json
+
+{
+  "amount": 100.5,
+  "currency": "USD",
+  "cardNumber": "4111111111111111",
+  "cardHolder": "John Doe",
+  "expMonth": "12",
+  "expYear": "2030",
+  "cvv": "123"
+}
+
+### Capturar pagamento
+POST {{FakePayment_HostAddress}}/api/payments/{{paymentId}}/capture
+Content-Type: application/json
+
+### Estornar pagamento
+POST {{FakePayment_HostAddress}}/api/payments/{{paymentId}}/refund
+Content-Type: application/json
+
+{
+  "amount": 100
+}
