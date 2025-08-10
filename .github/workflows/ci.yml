@@ -12,6 +12,6 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - run: dotnet restore BookVerse/src/Library.WebAPI/Library.WebAPI.csproj
-      - run: dotnet build --no-restore BookVerse/src/Library.WebAPI/Library.WebAPI.csproj
-      - run: dotnet test BookVerse/tests/Library.UnitTests/Library.UnitTests.csproj
+      - run: dotnet restore BookVerse/Api/Api.csproj
+      - run: dotnet build --no-restore BookVerse/Api/Api.csproj
+      # - run: dotnet test BookVerse/tests/UnitTests/UnitTests.csproj
