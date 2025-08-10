@@ -1,34 +1,44 @@
 ﻿version: '3.8'
 
 services:
-  webservice:
-    container_name: webservice
+  bookverse-service:
+    container_name: bookverse-service
     build:
-      context: .
-      dockerfile: webservice/src/Library.WebAPI/Dockerfile
+      context: ../
+      dockerfile: BookVerse/src/Library.WebAPI/Dockerfile
     ports:
       - "8080:8080"
       - "8081:8081"
     networks:
-      - library-network
+      - bookverse
 
-  database:
+  fake-payment-service:
+    container_name: fake-payment-service
+    build:
+      context: ../
+      dockerfile: Payment/FakePayment/Dockerfile
+    ports:
+      - "8082:8080"
+    networks:
+      - bookverse
+
+  bookverse-database:
     image: postgres
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: rootpassword
       POSTGRES_DB: library_db
     networks:
-      - library-network
+      - bookverse
     ports:
       - "5432:5432"
 
-  rabbitmq:
+  bookverse-rabbitmq:
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
 
 networks:
-  library-network:
+  bookverse:
     driver: bridge

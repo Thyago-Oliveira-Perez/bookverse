@@ -7,9 +7,9 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["FakePayment/FakePayment.csproj", "FakePayment/"]
+COPY ["Payment/FakePayment/.", "FakePayment/"]
 RUN dotnet restore "FakePayment/FakePayment.csproj"
-COPY . .
+COPY Payment/FakePayment src
 WORKDIR "/src/FakePayment"
 RUN dotnet build "FakePayment.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

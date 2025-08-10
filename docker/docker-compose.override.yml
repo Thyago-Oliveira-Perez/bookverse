@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  webservice:
+  bookverse-service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=localhost;Port=5432;Database=library_db;Username=root;Password=rootpassword
