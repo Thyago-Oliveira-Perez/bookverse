@@ -4,4 +4,4 @@ services:
   bookverse-service:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=localhost;Port=5432;Database=library_db;Username=root;Password=rootpassword
+      - ConnectionStrings__DefaultConnection=Host=bookverse-database;Port=5432;Database=bookverse_db;Username=root;Password=rootpassword

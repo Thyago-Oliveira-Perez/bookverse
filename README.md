@@ -35,29 +35,40 @@ Modern web application built with Hexagonal Architecture in .NET 8, Vue.js front
 
 ```
 
-Library/
-├── webservice/
-├─── src/
-│     ├── Library.Application/       # Use cases, commands, handlers (MediatR), internal services
-│     ├── Library.Domain/            # Entities, interfaces, domain logic
-│     ├── Library.Infrastructure/    # Repositories, DbContext, external services
-│     ├── Library.Messages/          # Messaging contracts
-│     └── Library.WebAPI/            # Controllers, Program.cs, middlewares
+BookVerse/
+├──📦 BookVerse
+│  ├── 📦 Core
+│  │   ├── 📂 Domain
+│  │   ├── 📂 Ports
+│  │   │   ├── 📂 In
+│  │   │   └── 📂 Out
+│  │   └── 📂 Application
+│  ├── 📦 Infrastructure
+│  │   ├── 📂 Persistence
+│  │   ├── 📂 Messaging
+│  │   └── 📂 Observability
+│  └── 📦 Api
+│  │   ├── Controllers
+│  │   └── Program.cs
+│  └── 📦 Tests/
 │
-├── webapp/                          # Vue.js project
-│
-├── tests/
-│   └── Library.UnitTests/           # Unit tests
-│
-├── docker/
+├── 📂 docker/
 │   ├── .dockerignore
 │   ├── docker-compose.override.yml
 │   └── docker-compose.yml
 │
+├── 📦 Payment/
+│   └── 📦 FakePayment/
+│       ├── 📂 Controllers
+│       ├── 📂 Models
+│       └── 📂 Services
+│
+├── WebApp/
+│
 ├── .github/
-│   └── workflows/ci.yml           # CI pipeline
+│   └── workflows/ci.yml
+│
 └── README.md
-
 ````
 
 ---
@@ -86,7 +97,7 @@ Library/
 
 ```bash
 git clone https://github.com/Thyago-Oliveira-Perez/Library.git
-cd Library
+cd BookVerse
 ```
 
 ---
@@ -107,9 +118,9 @@ This will start:
 ### 🛠️ 3. Run the backend (.NET)
 
 ```bash
-cd webservice/src
-dotnet ef database update --project src/Library.Infrastructure --startup-project src/Library.WebAPI
-dotnet run --project Library.WebAPI
+cd BookVerse
+dotnet ef database update --project Infrastructure --startup-project Api
+dotnet run --project Api
 ```
 
 ---
@@ -129,14 +140,14 @@ Access the app at [http://localhost:5173](http://localhost:5173)
 ## 📄 Generating migrations
 
 ```bash
-dotnet ef migrations add [NAME] --project Library.Infrastructure --startup-project Library.WebAPI
-dotnet ef database update --project src/Library.Infrastructure --startup-project src/Library.WebAPI
+dotnet ef migrations add [MIGRATION_NAME] --project Infrastructure --startup-project Api
+dotnet ef database update --project Infrastructure --startup-project Api
 ```
 
 ## ✅ Running Tests
 
 ```bash
-dotnet test webservice/tests/Library.UnitTests
+dotnet test BookVerse/Tests
 ```
 
 ---

@@ -9,7 +9,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Payment/FakePayment/.", "FakePayment/"]
 RUN dotnet restore "FakePayment/FakePayment.csproj"
-COPY Payment/FakePayment src
+COPY "Payment/FakePayment" src
 WORKDIR "/src/FakePayment"
 RUN dotnet build "FakePayment.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
