@@ -15,7 +15,7 @@ public class PaymentService
             Currency = req.Currency,
             OrderId = req.OrderId,
             CreatedAt = DateTime.UtcNow,
-            Status = ApproveOrDecline(req) ? "authorized" : "failed"
+            Status = "authorized"
         };
         _store[p.Id] = p;
         return p;
@@ -48,15 +48,5 @@ public class PaymentService
             Status = "succeeded"
         };
         return rf;
-    }
-
-    private static bool ApproveOrDecline(PaymentRequest req)
-    {
-        /*
-         * rule: if it ends with 0 it should decline, if no it should automatically capture
-         */
-        if (string.IsNullOrWhiteSpace(req.CardNumber)) return false;
-        var last = req.CardNumber.Trim().Last();
-        return last != '0';
     }
 }
