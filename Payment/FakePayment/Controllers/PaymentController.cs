@@ -1,40 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
-using FakePayment.Models;
+using FakePayment.Models.Payment;
+using FakePayment.Models.Refund;
 using FakePayment.Services;
 
 namespace FakePayment.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PaymentsController(PaymentService service) : ControllerBase
+public class PaymentsController(IPaymentService service) : ControllerBase
 {
     [HttpPost("create")]
-    public ActionResult<PaymentResponse> CreatePayment([FromBody] PaymentRequest req)
+    public async Task<ActionResult<PaymentResponse>> CreatePayment([FromBody] PaymentRequest req)
     {
-        var resp = service.CreatePayment(req);
-        return CreatedAtAction(nameof(GetPayment), new { id = resp.Id }, resp);
+        var resp = await service.CreatePayment(req);
+        return CreatedAtAction(nameof(CreatePayment), new { id = resp.Id }, resp);
     }
 
-    [HttpGet("{id}")]
-    public ActionResult<PaymentResponse> GetPayment(string id)
+    [HttpPost("refund")]
+    public async Task<ActionResult<RefundResponse>> Refund([FromBody] RefundRequest r)
     {
-        var p = service.GetPayment(id);
-        if (p == null) return NotFound();
-        return Ok(p);
-    }
-
-    [HttpPost("{id}/capture")]
-    public ActionResult<PaymentResponse> Capture(string id)
-    {
-        var p = service.Capture(id);
-        if (p == null) return NotFound();
-        return Ok(p);
-    }
-
-    [HttpPost("{id}/refund")]
-    public ActionResult<RefundResponse> Refund(string id, [FromBody] RefundRequest r)
-    {
-        var resp = service.Refund(id, r);
+        var resp = await service.Refund(r);
         if (resp == null) return NotFound();
         return Ok(resp);
     }

@@ -1,51 +1,61 @@
-
 using FakePayment.Infrastructure.Repositories;
-using FakePayment.Models;
+using FakePayment.Models.Transaction;
 
 namespace FakePayment.Tasks;
 
-public class TransactionProcessorService(ILogger<TransactionProcessorService> logger, ITransactionRepository repository) : BackgroundService
+public class TransactionProcessorService(ILogger<TransactionProcessorService> logger,IServiceScopeFactory scopeFactory)
+    : BackgroundService
 {
-  protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-  {
-    logger.LogInformation($"({nameof(ExecuteAsync)}) Transaction Processor started.");
-
-    while (!stoppingToken.IsCancellationRequested)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-      logger.LogInformation($"({nameof(ExecuteAsync)}) Checking for pending transactions...");
+        logger.LogInformation($"({nameof(ExecuteAsync)}) Transaction Processor started.");
 
-      await ProcessTransactionsAsync();
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            logger.LogInformation($"({nameof(ExecuteAsync)}) Checking for pending transactions...");
 
-      await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+            await ProcessTransactionsAsync(stoppingToken);
+
+            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+        }
+
+        logger.LogInformation($"({nameof(ExecuteAsync)}) Transaction Processor stopping.");
     }
 
-    logger.LogInformation($"({nameof(ExecuteAsync)}) Transaction Processor stopping.");
-  }
-
-  private async Task ProcessTransactionsAsync()
-  {
-    logger.LogInformation($"({nameof(ProcessTransactionsAsync)}) Processing pending transactions...");
-
-    var pendingTransactions = await repository.GetPendingTransactionsAsync();
-
-    foreach (var transaction in pendingTransactions)
+    private async Task ProcessTransactionsAsync(CancellationToken cancellationToken)
     {
-      if (transaction == null) continue; // Skip null transactions
+        using var scope = scopeFactory.CreateScope();
+        var repository = scope.ServiceProvider.GetRequiredService<ITransactionRepository>();
+        
+        logger.LogInformation($"({nameof(ProcessTransactionsAsync)}) Processing pending transactions...");
 
-      transaction.TransactionDate = DateTime.UtcNow;
-      transaction.CreatedAt = DateTimeOffset.UtcNow;
-      transaction.UpdatedAt = null;
+        try
+        {
+            var pendingTransactions = await repository.GetPendingTransactionsAsync();
 
-      transaction.Status = ApproveOrDecline() ? TransactionStatus.Completed : TransactionStatus.Declined;
-      await repository.AddTransactionAsync(transaction);
+            foreach (var transaction in pendingTransactions)
+            {
+                if (transaction == null) continue;
+
+                // Check for cancellation between transactions
+                cancellationToken.ThrowIfCancellationRequested();
+
+                transaction.UpdatedAt = DateTimeOffset.Now;
+                transaction.Status = ApproveOrDecline() 
+                    ? TransactionStatus.Completed 
+                    : TransactionStatus.Declined;
+
+                await repository.UpdateTransactionAsync(transaction);
+            }
+
+            logger.LogInformation($"({nameof(ProcessTransactionsAsync)}) Processed {pendingTransactions.Count()} transactions.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, $"Error processing transactions");
+        }
     }
 
-    logger.LogInformation($"({nameof(ProcessTransactionsAsync)}) Processed {pendingTransactions.Count()} transactions.");
-  }
-
-  private static bool ApproveOrDecline()
-  {
-    // rule: randomly approve or decline
-    return new Random().Next(0, 2) == 1; // 50% chance of approval
-  }
+    // rule: randomly approve or decline - 50% chance of approval
+    private static bool ApproveOrDecline() => new Random().Next(0, 2) == 1;
 }

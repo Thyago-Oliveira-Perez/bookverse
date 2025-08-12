@@ -1,11 +1,10 @@
-using FakePayment.Models;
+using FakePayment.Models.Transaction;
 using Microsoft.EntityFrameworkCore;
 
 namespace FakePayment.Infrastructure.Repositories;
 
 public class TransactionRepository(PaymentDbContext context) : ITransactionRepository
 {
-
   public async Task<IEnumerable<Transaction?>> GetPendingTransactionsAsync()
   {
     return await context.Transactions
@@ -19,14 +18,15 @@ public class TransactionRepository(PaymentDbContext context) : ITransactionRepos
     await context.SaveChangesAsync();
   }
 
+  public async Task<Transaction?> GetTransactionByIdAsync(int id)
+  {
+    return await context.Transactions.FirstOrDefaultAsync(t => t.Id == id);
+  }
+
   public async Task UpdateTransactionAsync(Transaction transaction)
   {
-    var existingTransaction = await context.Transactions.FindAsync(transaction.Id);
-    if (existingTransaction != null)
-    {
-      existingTransaction.Status = transaction.Status;
-      existingTransaction.UpdatedAt = DateTimeOffset.UtcNow;
-      await context.SaveChangesAsync();
-    }
+    transaction.Status = transaction.Status;
+    transaction.UpdatedAt = DateTimeOffset.UtcNow;
+    await context.SaveChangesAsync();
   }
 }

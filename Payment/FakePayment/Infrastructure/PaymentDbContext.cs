@@ -1,4 +1,4 @@
-using FakePayment.Models;
+using FakePayment.Models.Transaction;
 using Microsoft.EntityFrameworkCore;
 
 namespace FakePayment.Infrastructure;
@@ -12,7 +12,6 @@ public class PaymentDbContext(DbContextOptions<PaymentDbContext> options) : DbCo
         modelBuilder.Entity<Transaction>(entity =>
         {
             entity.HasKey(b => b.Id);
-            entity.Property(b => b.TransactionDate).IsRequired();
             entity.Property(b => b.Amount).IsRequired().HasColumnType("decimal(18,2)");
             entity.Property(b => b.Status).IsRequired();
         });

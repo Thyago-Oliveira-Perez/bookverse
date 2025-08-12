@@ -1,4 +1,4 @@
-namespace FakePayment.Models;
+namespace FakePayment.Models.Transaction;
 
 public enum TransactionStatus
 {

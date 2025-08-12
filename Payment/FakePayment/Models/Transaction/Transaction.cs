@@ -1,9 +1,8 @@
-namespace FakePayment.Models;
+namespace FakePayment.Models.Transaction;
 
 public class Transaction
 {
-  public int Id { get; set; }
-  public DateTime TransactionDate { get; set; }
+  public int Id { get; init; }
   public TransactionCurrency Currency { get; set; }
   public decimal Amount { get; set; }
   public TransactionStatus Status { get; set; }
