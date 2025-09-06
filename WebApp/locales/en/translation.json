@@ -1,0 +1,41 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "General overview of the library system",
+    "lastUpdate": "Last update"
+  },
+  "stats": {
+    "totalBooks": "Total Books",
+    "available": "available",
+    "activeMembers": "Active Members",
+    "fromLastMonth": "+12% from last month",
+    "activeLoans": "Active Loans",
+    "ofCollection": "of collection",
+    "overdueLoans": "Overdue Loans",
+    "requiresAttention": "Requires immediate attention"
+  },
+  "charts": {
+    "monthlyLoans": "Monthly Loans",
+    "last6Months": "Last 6 months",
+    "categoryDistribution": "Category Distribution",
+    "percentageOfCollection": "Percentage of collection"
+  },
+  "tables": {
+    "popularBooks": "Popular Books",
+    "basedOnLastMonth": "Based on last month's loans",
+    "loans": "loans",
+    "overdueBooks": "Overdue Books",
+    "requiresImmediateAction": "Requires immediate action",
+    "dueDate": "Due Date",
+    "days": "days",
+    "contact": "Contact"
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "description": "Quick access to frequently used features",
+    "newBook": "New Book",
+    "newMember": "New Member",
+    "newLoan": "New Loan",
+    "reports": "Reports"
+  }
+}
