@@ -14,8 +14,38 @@ import { Sidebar } from "@/components/layout/sidebar"
 import { Header } from "@/components/layout/header"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Save, BookOpen } from "lucide-react"
+import { createBook } from "@/services/books"
 
-const categories = ["Literatura", "Ciências", "História", "Filosofia", "Arte", "Tecnologia", "Biografia"]
+const categories = [
+  {
+    value: 1,
+    label: "Literatura"
+  },
+  {
+    value: 2,
+    label: "Ciências"
+  },
+  {
+    value: 3,
+    label: "História"
+  },
+  {
+    value: 4,
+    label: "Filosofia"
+  },
+  {
+    value: 5,
+    label: "Arte"
+  },
+  {
+    value: 6,
+    label: "Tecnologia"
+  },
+  {
+    value: 7,
+    label: "Biografia"
+  }
+]
 
 export default function NewBookPage() {
   const router = useRouter()
@@ -26,10 +56,12 @@ export default function NewBookPage() {
     category: "",
     publishYear: "",
     publisher: "",
-    pages: "",
-    copies: "",
+    numberOfPages: "",
+    numberOfExamples: "",
     description: "",
-    location: "",
+    section: "",
+    stand: "",
+    shelf: ""
   })
 
   const handleInputChange = (field: string, value: string) => {
@@ -38,10 +70,13 @@ export default function NewBookPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you would typically send the data to your backend
-    console.log("New book data:", formData)
-    // Simulate success and redirect
-    router.push("/books")
+    createBook(formData)
+      .then(() => {
+        router.push("/books")
+      })
+      .catch((error) => {
+        console.error("Error creating book:", error)
+      })
   }
 
   return (
@@ -118,8 +153,8 @@ export default function NewBookPage() {
                         </SelectTrigger>
                         <SelectContent>
                           {categories.map((category) => (
-                            <SelectItem key={category} value={category}>
-                              {category}
+                            <SelectItem key={category.value} value={category.value.toString()}>
+                              {category.label}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -154,8 +189,8 @@ export default function NewBookPage() {
                       <Input
                         id="pages"
                         type="number"
-                        value={formData.pages}
-                        onChange={(e) => handleInputChange("pages", e.target.value)}
+                        value={formData.numberOfPages}
+                        onChange={(e) => handleInputChange("numberOfPages", e.target.value)}
                         placeholder="300"
                         min="1"
                       />
@@ -188,20 +223,38 @@ export default function NewBookPage() {
                       <Input
                         id="copies"
                         type="number"
-                        value={formData.copies}
-                        onChange={(e) => handleInputChange("copies", e.target.value)}
+                        value={formData.numberOfExamples}
+                        onChange={(e) => handleInputChange("numberOfExamples", e.target.value)}
                         placeholder="1"
                         min="1"
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="location">Localização na Biblioteca</Label>
+                      <Label htmlFor="location">Seção</Label>
                       <Input
                         id="location"
-                        value={formData.location}
-                        onChange={(e) => handleInputChange("location", e.target.value)}
-                        placeholder="Seção A, Estante 3, Prateleira 2"
+                        value={formData.section}
+                        onChange={(e) => handleInputChange("section", e.target.value)}
+                        placeholder="Seção A"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="location">Estante</Label>
+                      <Input
+                        id="location"
+                        value={formData.stand}
+                        onChange={(e) => handleInputChange("stand", e.target.value)}
+                        placeholder="Estante 3"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="location">Prateleira</Label>
+                      <Input
+                        id="location"
+                        value={formData.shelf}
+                        onChange={(e) => handleInputChange("shelf", e.target.value)}
+                        placeholder="Prateleira 2"
                       />
                     </div>
                   </div>

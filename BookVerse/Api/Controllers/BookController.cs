@@ -9,15 +9,15 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class BooksController(IMediator mediator, ILogger<BooksController> logger) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("Create")]
     [ProducesResponseType(typeof(BookDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateBook([FromBody] CreateBookCommand command)
     {
         logger.LogInformation("Creating new book with ISBN: {Isbn}", command.Isbn);
-        
+
         var result = await mediator.Send(command);
-        
+
         if (!result.IsSuccess)
         {
             logger.LogWarning("Failed to create book: {Errors}", result.Errors);
