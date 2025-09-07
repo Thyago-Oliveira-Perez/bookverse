@@ -4,7 +4,7 @@ namespace Core.Ports.Out;
 
 public interface IBookRepository
 {
-    Task<Book?> GetByIdAsync(Guid id);
+    Task<Book?> GetByIdAsync(int id);
     Task<IEnumerable<Book?>> SearchAsync(string searchTerm);
     Task AddAsync(Book? book);
     Task UpdateAsync(Book? book);

@@ -1,40 +1,45 @@
 # 📚 Library App
 
-Modern web application built with Hexagonal Architecture in .NET 8, Vue.js frontend, PostgreSQL as the database, and RabbitMQ for messaging. Includes full local infrastructure using Docker and CI with GitHub Actions.
+Modern web application built with Hexagonal Architecture in .NET 8, Next.js frontend, PostgreSQL as the database, and RabbitMQ for messaging. Includes full local infrastructure using Docker, version management with **mise**, and CI with GitHub Actions.
 
 ## 🚀 Technologies Used
 
 ### 🔧 Backend (.NET 8)
-- **ASP.NET Core 8 (WebAPI)**
-- **Entity Framework Core (PostgreSQL)**
-- **MediatR** – CQRS and handlers
-- **OpenTelemetry** – observability
-- **RabbitMQ.Client** – messaging
+
+* **ASP.NET Core 8 (WebAPI)**
+* **Entity Framework Core (PostgreSQL)**
+* **MediatR** – CQRS and handlers
+* **OpenTelemetry** – observability
+* **RabbitMQ.Client** – messaging
 
 ### 💻 Frontend
-- **Vue.js** – Single Page Application
-- **pnpm** – fast package manager for Node.js
-- **Axios** – HTTP client
+
+* **Next.js** – React-based framework for SSR and SSG
+* **pnpm** – fast package manager for Node.js
+* **Axios** – HTTP client
 
 ### 🧪 Testing
-- **xUnit**
-- **FluentAssertions**
-- **Moq**
+
+* **xUnit**
+* **FluentAssertions**
+* **Moq**
 
 ### 🐘 Database
-- **PostgreSQL**
+
+* **PostgreSQL**
 
 ### 📦 Infrastructure
-- **Docker Compose** – consistent local development
-- **RabbitMQ** – message queue
-- **GitHub Actions** – CI pipeline for build and tests
+
+* **Docker Compose** – consistent local development
+* **RabbitMQ** – message queue
+* **GitHub Actions** – CI pipeline for build and tests
+* **mise** – version management for Node.js and .NET
 
 ---
 
 ## 🗂️ Project Structure
 
 ```
-
 BookVerse/
 ├──📦 BookVerse
 │  ├── 📦 Core
@@ -63,13 +68,13 @@ BookVerse/
 │       ├── 📂 Models
 │       └── 📂 Services
 │
-├── WebApp/
+├── WebApp/   # Next.js frontend
 │
 ├── .github/
 │   └── workflows/ci.yml
 │
 └── README.md
-````
+```
 
 ---
 
@@ -77,19 +82,15 @@ BookVerse/
 
 ### Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-- [Node.js LTS](https://nodejs.org/)
-- [pnpm](https://pnpm.io/installation) – install globally:
+* [mise](https://mise.jdx.dev/) – used to manage Node.js and .NET versions
+* [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (handled by mise)
+* [Node.js LTS](https://nodejs.org/) (handled by mise)
+* [pnpm](https://pnpm.io/installation) – install globally:
+
   ```bash
   npm install -g pnpm
-  ````
-
-* [Docker](https://www.docker.com/)
-* EF Core CLI:
-
-  ```bash
-  dotnet tool install --global dotnet-ef
   ```
+* [Docker](https://www.docker.com/)
 
 ---
 
@@ -115,34 +116,70 @@ This will start:
 
 ---
 
-### 🛠️ 3. Run the backend (.NET)
+### 🛠️ 3. Configure EF Core CLI on Linux
+
+When working on Linux, configure `dotnet-ef` as a local tool:
 
 ```bash
 cd BookVerse
-dotnet ef database update --project Infrastructure --startup-project Api
-dotnet run --project Api
+dotnet new tool-manifest # only once per repo
+dotnet tool install dotnet-ef
+dotnet tool restore
 ```
 
----
-
-### 🌐 4. Run the frontend (Vue.js with pnpm)
-
-```bash
-cd webapp
-pnpm install
-pnpm run dev
-```
-
-Access the app at [http://localhost:5173](http://localhost:5173)
-
----
-
-## 📄 Generating migrations
+Run migrations with:
 
 ```bash
 dotnet ef migrations add [MIGRATION_NAME] --project Infrastructure --startup-project Api
 dotnet ef database update --project Infrastructure --startup-project Api
 ```
+
+---
+
+### ▶️ 4. Run the backend (.NET)
+
+```bash
+cd BookVerse
+dotnet run --project Api
+```
+
+---
+
+### 🌐 5. Run the frontend (Next.js with pnpm)
+
+```bash
+cd WebApp
+pnpm install
+pnpm run dev
+```
+
+Access the app at [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🔧 Version Management with mise
+
+This project uses **[mise](https://mise.jdx.dev/)** to ensure consistent runtime versions across environments.
+
+* Versions for **.NET** and **Node.js** are declared in the `mise.toml` file at the root of the repository.
+
+* When you enter the project directory, mise automatically switches to the correct versions (if installed).
+
+* To install missing versions defined in `mise.toml`:
+
+  ```bash
+  mise install
+  ```
+
+* To check which versions are currently active:
+
+  ```bash
+  mise list
+  ```
+
+This guarantees all developers and CI pipelines run on the exact same versions.
+
+---
 
 ## ✅ Running Tests
 
@@ -164,24 +201,67 @@ The project includes a basic workflow at `.github/workflows/ci.yml` with the fol
 
 ## 📚 Useful Commands
 
-| Command                         | Description                      |
-| ------------------------------- | -------------------------------- |
-| `dotnet ef migrations add [NAME]` | Create a new EF Core migration   |
-| `dotnet ef database update`     | Apply migrations to the database |
-| `docker compose down`           | Stop all containers              |
-| `docker compose logs -f`        | View logs in real time           |
-| `dotnet run --project ...`      | Run a specific .NET project      |
-| `pnpm install`                  | Install frontend dependencies    |
-| `pnpm run dev`                  | Run Vue.js development server    |
+| Command                           | Description                        |
+| --------------------------------- | ---------------------------------- |
+| `dotnet ef migrations add [NAME]` | Create a new EF Core migration     |
+| `dotnet ef database update`       | Apply migrations to the database   |
+| `docker compose down`             | Stop all containers                |
+| `docker compose logs -f`          | View logs in real time             |
+| `dotnet run --project ...`        | Run a specific .NET project        |
+| `pnpm install`                    | Install frontend dependencies      |
+| `pnpm run dev`                    | Run Next.js development server     |
+| `mise install`                    | Install runtimes defined in config |
+| `mise list`                       | Show active versions               |
 
 ---
 
 ## 🧱 Future Improvements
 
-* JWT authentication
+* Authentication and authorization using **Keycloak**
+* Book purchasing functionality integrated with a fake payment provider already started in `Payment/FakePayment`
 * Production-grade deployment (Azure, AWS, etc.)
 * Caching with Redis
 * Integration and load testing
+
+---
+
+## 🔑 Keycloak Integration
+
+In future iterations, the application will use **[Keycloak](https://www.keycloak.org/)** as the identity and access management solution.
+
+Keycloak will provide:
+
+* **User authentication** (login, logout, registration)
+* **Authorization** through roles and groups
+* **Token management** (JWT/OAuth2)
+* **SSO (Single Sign-On)** capabilities
+
+Planned integration flow:
+
+1. The **backend (.NET 8 API)** will validate access tokens issued by Keycloak.
+2. The **Next.js frontend** will integrate with Keycloak for user login and token refresh.
+3. Future modules like **book purchasing** will leverage Keycloak roles (e.g., `user`, `admin`) to control access.
+
+---
+
+## 💳 Fake Payment Module
+
+To support the upcoming **book purchasing feature**, a **fake payment provider** has been added to the project under:
+
+```
+Payment/FakePayment/
+├── Controllers
+├── Models
+└── Services
+```
+
+This module simulates a payment gateway and can be used during development and testing without relying on an external provider.
+
+Planned usage:
+
+* Allow testing of purchase flows end-to-end.
+* Provide mock responses (success, failure, pending).
+* Be easily replaceable with a real payment gateway in the future.
 
 ---
 

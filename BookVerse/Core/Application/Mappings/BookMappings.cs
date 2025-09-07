@@ -13,9 +13,16 @@ public static class BookMappings
             Title = book.Title,
             Author = book.Author,
             Isbn = book.Isbn,
+            Category = book.Category,
             PublicationYear = book.PublicationYear,
-            IsAvailable = book.IsAvailable,
-            CreatedAt = book.CreatedAt,
+            Publisher = book.Publisher,
+            NumberOfPages = book.NumberOfPages,
+            Description = book.Description,
+            NumberOfExamples = book.NumberOfExamples,
+            Section = book.Section,
+            Stand = book.Stand,
+            Shelf = book.Shelf,
+            CreatedAt = book.CreatedAt
         };
     }
 }

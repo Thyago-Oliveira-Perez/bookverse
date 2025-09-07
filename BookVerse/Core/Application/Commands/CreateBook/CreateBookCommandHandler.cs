@@ -16,17 +16,16 @@ public class CreateBookCommandHandler(IBookRepository bookRepository)
         try
         {
             var book = new Book(
-                request.Title,
-                request.Author,
-                request.Isbn,
-                request.PublicationYear);
+                request.Title, request.Author, request.Isbn, request.PublicationYear,
+                request.Category, request.Publisher, request.NumberOfPages, request.Section,
+                request.Stand, request.Shelf, request.NumberOfExamples, request.Description);
 
             await bookRepository.AddAsync(book);
 
             var bookDto = book.ToDto();
 
             // await notificationService.PublishBookCreatedAsync(bookDto);
-            
+
             return Result<BookDto>.Success(bookDto);
         }
         catch (DomainException ex)

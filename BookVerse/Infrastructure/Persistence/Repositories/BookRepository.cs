@@ -18,7 +18,7 @@ public class BookRepository(BookVerseDbContext context) : IBookRepository
             .AnyAsync(b => b.Isbn == isbn);
     }
 
-    public async Task<Book?> GetByIdAsync(Guid id)
+    public async Task<Book?> GetByIdAsync(int id)
     {
         return await context.Books
             .FirstOrDefaultAsync(b => b.Id == id);
@@ -27,7 +27,7 @@ public class BookRepository(BookVerseDbContext context) : IBookRepository
     public async Task<IEnumerable<Book?>> SearchAsync(string searchTerm)
     {
         return await context.Books
-            .Where(b => b.Title.Contains(searchTerm) || 
+            .Where(b => b.Title.Contains(searchTerm) ||
                         b.Author.Contains(searchTerm) ||
                         b.Isbn.Contains(searchTerm))
             .ToListAsync();
