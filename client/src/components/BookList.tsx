@@ -46,27 +46,42 @@ export const BookList: React.FC<BookListProps> = ({ books, onEdit, onDelete }) =
             </div>
           </CardHeader>
           <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">{book.description}</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
                 <span className="font-medium">Author:</span>
                 <p>{book.author}</p>
               </div>
               <div>
+                <span className="font-medium">Publisher:</span>
+                <p>{book.publisher}</p>
+              </div>
+              <div>
+                <span className="font-medium">Published:</span>
+                <p>{book.publicationYear}</p>
+              </div>
+              <div>
                 <span className="font-medium">ISBN:</span>
                 <p>{book.isbn}</p>
               </div>
               <div>
-                <span className="font-medium">Published:</span>
-                <p>{book.publishedYear}</p>
+                <span className="font-medium">Pages:</span>
+                <p>{book.numberOfPages}</p>
               </div>
               <div>
-                <span className="font-medium">Genre:</span>
-                <p>{book.genre}</p>
+                <span className="font-medium">Category:</span>
+                <p>{book.category}</p>
+              </div>
+              <div>
+                <span className="font-medium">Location:</span>
+                <p>
+                  {book.section} / {book.stand} / {book.shelf}
+                </p>
               </div>
               <div>
                 <span className="font-medium">Copies:</span>
                 <p>
-                  {book.availableCopies} of {book.totalCopies} available
+                  {book.availableCopies} available ({book.numberOfExamples} examples)
                 </p>
               </div>
             </div>

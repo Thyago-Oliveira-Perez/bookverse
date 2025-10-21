@@ -20,9 +20,15 @@ export const BookForm: React.FC<BookFormProps> = ({
     title: book?.title || '',
     author: book?.author || '',
     isbn: book?.isbn || '',
-    publishedYear: book?.publishedYear || new Date().getFullYear(),
-    genre: book?.genre || '',
-    totalCopies: book?.totalCopies || 1,
+    category: book?.category || 0,
+    publicationYear: book?.publicationYear || new Date().getFullYear(),
+    publisher: book?.publisher || '',
+    numberOfPages: book?.numberOfPages || 0,
+    description: book?.description || '',
+    numberOfExamples: book?.numberOfExamples || 0,
+    section: book?.section || '',
+    stand: book?.stand || '',
+    shelf: book?.shelf || '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -30,11 +36,20 @@ export const BookForm: React.FC<BookFormProps> = ({
     onSubmit(formData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'publishedYear' || name === 'totalCopies' ? parseInt(value) || 0 : value,
+      [name]: [
+        'publicationYear',
+        'category',
+        'numberOfPages',
+        'numberOfExamples',
+      ].includes(name)
+        ? parseInt(value) || 0
+        : value,
     }));
   };
 
@@ -92,31 +107,37 @@ export const BookForm: React.FC<BookFormProps> = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="publishedYear" className="block text-sm font-medium mb-1">
-                Published Year *
+              <label
+                htmlFor="publicationYear"
+                className="block text-sm font-medium mb-1"
+              >
+                Publication Year *
               </label>
               <input
                 type="number"
-                id="publishedYear"
-                name="publishedYear"
-                value={formData.publishedYear}
+                id="publicationYear"
+                name="publicationYear"
+                value={formData.publicationYear}
                 onChange={handleChange}
                 required
                 min="1000"
-                max="2030"
+                max={new Date().getFullYear()}
                 className="w-full px-3 py-2 border rounded-md"
               />
             </div>
 
             <div>
-              <label htmlFor="totalCopies" className="block text-sm font-medium mb-1">
-                Total Copies *
+              <label
+                htmlFor="numberOfPages"
+                className="block text-sm font-medium mb-1"
+              >
+                Number of Pages *
               </label>
               <input
                 type="number"
-                id="totalCopies"
-                name="totalCopies"
-                value={formData.totalCopies}
+                id="numberOfPages"
+                name="numberOfPages"
+                value={formData.numberOfPages}
                 onChange={handleChange}
                 required
                 min="1"
@@ -125,19 +146,125 @@ export const BookForm: React.FC<BookFormProps> = ({
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium mb-1"
+              >
+                Category *
+              </label>
+              <input
+                type="number"
+                id="category"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border rounded-md"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="numberOfExamples"
+                className="block text-sm font-medium mb-1"
+              >
+                Number of Examples *
+              </label>
+              <input
+                type="number"
+                id="numberOfExamples"
+                name="numberOfExamples"
+                value={formData.numberOfExamples}
+                onChange={handleChange}
+                required
+                min="0"
+                className="w-full px-3 py-2 border rounded-md"
+              />
+            </div>
+          </div>
+
           <div>
-            <label htmlFor="genre" className="block text-sm font-medium mb-1">
-              Genre *
+            <label
+              htmlFor="publisher"
+              className="block text-sm font-medium mb-1"
+            >
+              Publisher *
             </label>
             <input
               type="text"
-              id="genre"
-              name="genre"
-              value={formData.genre}
+              id="publisher"
+              name="publisher"
+              value={formData.publisher}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border rounded-md"
             />
+          </div>
+
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium mb-1"
+            >
+              Description *
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border rounded-md"
+            />
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label
+                htmlFor="section"
+                className="block text-sm font-medium mb-1"
+              >
+                Section *
+              </label>
+              <input
+                type="text"
+                id="section"
+                name="section"
+                value={formData.section}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border rounded-md"
+              />
+            </div>
+            <div>
+              <label htmlFor="stand" className="block text-sm font-medium mb-1">
+                Stand *
+              </label>
+              <input
+                type="text"
+                id="stand"
+                name="stand"
+                value={formData.stand}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border rounded-md"
+              />
+            </div>
+            <div>
+              <label htmlFor="shelf" className="block text-sm font-medium mb-1">
+                Shelf *
+              </label>
+              <input
+                type="text"
+                id="shelf"
+                name="shelf"
+                value={formData.shelf}
+                onChange={handleChange}
+                required
+                className="w-full px-3 py-2 border rounded-md"
+              />
+            </div>
           </div>
 
           <div className="flex justify-end space-x-2 pt-4">
@@ -150,7 +277,7 @@ export const BookForm: React.FC<BookFormProps> = ({
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Saving...' : (book ? 'Update' : 'Add')} Book
+              {isSubmitting ? 'Saving...' : book ? 'Update' : 'Add'} Book
             </Button>
           </div>
         </form>

@@ -3,9 +3,15 @@ export interface Book {
   title: string;
   author: string;
   isbn: string;
-  publishedYear: number;
-  genre: string;
-  totalCopies: number;
+  category: number;
+  publicationYear: number;
+  publisher: string;
+  numberOfPages: number;
+  description: string;
+  numberOfExamples: number;
+  section: string;
+  stand: string;
+  shelf: string;
   availableCopies: number;
 }
 
@@ -13,9 +19,15 @@ export interface CreateBookRequest {
   title: string;
   author: string;
   isbn: string;
-  publishedYear: number;
-  genre: string;
-  totalCopies: number;
+  category: number;
+  publicationYear: number;
+  publisher: string;
+  numberOfPages: number;
+  description: string;
+  numberOfExamples: number;
+  section: string;
+  stand: string;
+  shelf: string;
 }
 
 export type UpdateBookRequest = Partial<CreateBookRequest>;

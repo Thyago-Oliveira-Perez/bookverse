@@ -3,77 +3,61 @@ import { Book, CreateBookRequest } from '../types/book';
 import { BookList } from '../components/BookList';
 import { BookForm } from '../components/BookForm';
 import { Button } from '../components/ui/button';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
-
-// Mock data for demonstration
-const mockBooks: Book[] = [
-  {
-    id: '1',
-    title: 'The Great Gatsby',
-    author: 'F. Scott Fitzgerald',
-    isbn: '9780743273565',
-    publishedYear: 1925,
-    genre: 'Classic',
-    totalCopies: 5,
-    availableCopies: 3,
-  },
-  {
-    id: '2',
-    title: 'To Kill a Mockingbird',
-    author: 'Harper Lee',
-    isbn: '9780061120084',
-    publishedYear: 1960,
-    genre: 'Fiction',
-    totalCopies: 3,
-    availableCopies: 1,
-  },
-];
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog';
+import { createBook, listBooks } from '../lib/api/book';
 
 export const BooksPage: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulate API call with delay
     const loadBooks = async () => {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setBooks(mockBooks);
+      const books = await listBooks();
+      setBooks(books);
     };
     loadBooks();
   }, []);
 
   const handleCreateBook = async (data: CreateBookRequest) => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const newBook: Book = {
-      ...data,
-      id: Date.now().toString(),
-      availableCopies: data.totalCopies,
-    };
-    
-    setBooks(prev => [...prev, newBook]);
-    setIsSubmitting(false);
-    setIsDialogOpen(false);
+    setError(null);
+    try {
+      const newBook = await createBook(data);
+      setBooks(prev => [...prev, newBook]);
+      setIsDialogOpen(false);
+    } catch (err) {
+      setError('Failed to create book. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleUpdateBook = async (data: CreateBookRequest) => {
     if (!editingBook) return;
 
     setIsSubmitting(true);
-    // Simulate API call
+    // TODO: Implement API call to update a book
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const updatedBook: Book = {
       ...editingBook,
       ...data,
-      availableCopies: data.totalCopies - (editingBook.totalCopies - editingBook.availableCopies),
+      availableCopies:
+        editingBook.availableCopies,
     };
-    
-    setBooks(prev => prev.map(book => book.id === editingBook.id ? updatedBook : book));
+
+    setBooks(prev =>
+      prev.map(book => (book.id === editingBook.id ? updatedBook : book)),
+    );
     setIsSubmitting(false);
     setEditingBook(null);
     setIsDialogOpen(false);
@@ -82,7 +66,7 @@ export const BooksPage: React.FC = () => {
   const handleDeleteBook = async (bookId: string) => {
     if (!window.confirm('Are you sure you want to delete this book?')) return;
 
-    // Simulate API call
+    // TODO: Implement API call to delete a book
     await new Promise(resolve => setTimeout(resolve, 500));
     setBooks(prev => prev.filter(book => book.id !== bookId));
   };
@@ -113,6 +97,11 @@ export const BooksPage: React.FC = () => {
                 {editingBook ? 'Edit Book' : 'Add New Book'}
               </DialogTitle>
             </DialogHeader>
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{error}</span>
+              </div>
+            )}
             <BookForm
               book={editingBook || undefined}
               onSubmit={editingBook ? handleUpdateBook : handleCreateBook}
@@ -123,11 +112,7 @@ export const BooksPage: React.FC = () => {
         </Dialog>
       </div>
 
-      <BookList
-        books={books}
-        onEdit={handleEdit}
-        onDelete={handleDeleteBook}
-      />
+      <BookList books={books} onEdit={handleEdit} onDelete={handleDeleteBook} />
     </div>
   );
 };

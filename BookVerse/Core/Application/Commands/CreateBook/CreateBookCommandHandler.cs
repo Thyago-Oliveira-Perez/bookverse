@@ -26,15 +26,15 @@ public class CreateBookCommandHandler(IBookRepository bookRepository)
 
             // await notificationService.PublishBookCreatedAsync(bookDto);
 
-            return Result<BookDto>.Success(bookDto);
+            return Result.Success(bookDto);
         }
         catch (DomainException ex)
         {
-            return Result<BookDto>.Failure<BookDto>([ex.Message]);
+            return Result.Failure<BookDto?>([ex.Message]);
         }
         catch (Exception ex)
         {
-            return Result<BookDto>.Failure<BookDto>([$"An error occurred while creating the book. Ex: {ex}"]);
+            return Result.Failure<BookDto?>([$"An error occurred while creating the book. Ex: {ex}"]);
         }
     }
 }

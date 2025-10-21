@@ -38,4 +38,9 @@ public class BookRepository(BookVerseDbContext context) : IBookRepository
         context.Books.Update(book);
         await context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<Book?>> GetAllAsync()
+    {
+        return await context.Books.ToListAsync();
+    }
 }

@@ -1,26 +1,26 @@
 ﻿version: '3.8'
 
 services:
-  bookverse-service:
-    container_name: bookverse-service
-    build:
-      context: ../
-      dockerfile: BookVerse/Api/Dockerfile
-    ports:
-      - "8080:8080"
-      - "8081:8081"
-    networks:
-      - bookverse
-
-  fake-payment-service:
-    container_name: fake-payment-service
-    build:
-      context: ../
-      dockerfile: Payment/FakePayment/Dockerfile
-    ports:
-      - "8082:8080"
-    networks:
-      - bookverse
+  # bookverse-service:
+  #   container_name: bookverse-service
+  #   build:
+  #     context: ../
+  #     dockerfile: BookVerse/Api/Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #     - "8081:8081"
+  #   networks:
+  #     - bookverse
+  #
+  # fake-payment-service:
+  #   container_name: fake-payment-service
+  #   build:
+  #     context: ../
+  #     dockerfile: Payment/FakePayment/Dockerfile
+  #   ports:
+  #     - "8082:8080"
+  #   networks:
+  #     - bookverse
 
   bookverse-database:
     image: postgres
@@ -33,11 +33,11 @@ services:
     ports:
       - "5432:5432"
 
-  bookverse-rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+  # bookverse-rabbitmq:
+  #   image: rabbitmq:3-management
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
 
 networks:
   bookverse:
