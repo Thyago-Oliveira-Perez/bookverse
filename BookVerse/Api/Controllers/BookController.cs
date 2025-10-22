@@ -2,6 +2,7 @@
 using Core.Application.DTOs;
 using Core.Application.Queries.GetAllBooks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -10,6 +11,7 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class BooksController(IMediator mediator, ILogger<BooksController> logger) : ControllerBase
 {
+    [Authorize]
     [HttpPost("Create")]
     [ProducesResponseType(typeof(BookDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

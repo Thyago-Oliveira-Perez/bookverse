@@ -5,6 +5,7 @@ using Infrastructure.Persistence.Repositories;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,20 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "http://localhost:8083/realms/bookverse";
+        options.RequireHttpsMetadata = false;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddOpenTelemetry().WithTracing(tracing =>
 {
     tracing.AddAspNetCoreInstrumentation();
@@ -52,6 +67,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowedOrigins");
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
