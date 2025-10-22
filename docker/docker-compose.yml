@@ -1,4 +1,4 @@
-﻿version: '3.8'
+﻿version: "3.8"
 
 services:
   # bookverse-service:
@@ -23,6 +23,7 @@ services:
   #     - bookverse
 
   bookverse-database:
+    container_name: bookverse-database
     image: postgres
     environment:
       POSTGRES_USER: root
@@ -34,10 +35,28 @@ services:
       - "5432:5432"
 
   # bookverse-rabbitmq:
+  #   container_name: bookverse-rabbitmq
   #   image: rabbitmq:3-management
   #   ports:
   #     - "5672:5672"
   #     - "15672:15672"
+
+  keycloak:
+    container_name: bookverse-keycloak
+    image: quay.io/keycloak/keycloak:26.3.3
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    command: start-dev
+    volumes:
+      - bookverse_keycloak_data:/opt/keycloak/data
+    ports:
+      - "8083:8080"
+    networks:
+      - bookverse
+
+volumes:
+  bookverse_keycloak_data:
 
 networks:
   bookverse:
